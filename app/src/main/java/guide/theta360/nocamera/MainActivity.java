@@ -35,12 +35,28 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-// if you have a real camera, change the two lines below
+/**
+ * if you are using an emulator MainActivity should extend AppCompatActivity
+ * if you have a real camera, comment out the next line
+ */
+public class MainActivity extends AppCompatActivity {
+    /**
+     * if you have a real camera, uncomment the lines below
+     * */
+//public class MainActivity extends PluginActivity {
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        setKeyCallback(keyCallback);
+//        Log.d("THETADEBUG", "set key callback");
+//        if (isApConnected()) {
+//        }
+//    }
+///////////////////////////////////////////
+// End comment section
+///////////////////////////////////////////
 
-//public class MainActivity extends AppCompatActivity {
-public class MainActivity extends PluginActivity {
-
-    private final boolean HAVE_PHYSICAL_CAMERA = true;
 
     Button takePictureButton;
     ImageView thetaImageView;
@@ -58,6 +74,9 @@ public class MainActivity extends PluginActivity {
 
 
     int imageNumber = 0;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,19 +128,7 @@ public class MainActivity extends PluginActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        if (HAVE_PHYSICAL_CAMERA) {
-            setKeyCallback(keyCallback);
-            Log.d("THETADEBUG", "set key callback");
-            if (isApConnected()) {
-
-            }
-
-        }
-    }
 
     private void processImage(String thetaPicturePath) {
         /**
