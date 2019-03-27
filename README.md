@@ -13,7 +13,7 @@ uses actual RICOH THETA images stored in the app. The virtual shutter
 button will save the image to the virtual SD card of your AVD.
 
 To use the app with a physical device RICOH THETA V, uncomment
-out the code at the beginning of `MainActivity.java`. With a 
+the code at the beginning of `MainActivity.java`. With a 
 physical device, you can use the shutter button on the camera
 to take a picture.
 The shutter button also triggers the automatic processing of the image.
