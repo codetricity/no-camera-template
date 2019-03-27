@@ -8,10 +8,20 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.theta360.pluginlibrary.activity.PluginActivity;
+import com.theta360.pluginlibrary.callback.KeyCallback;
+import com.theta360.pluginlibrary.receiver.KeyReceiver;
+
+import org.theta4j.osc.CommandResponse;
+import org.theta4j.osc.CommandState;
+import org.theta4j.webapi.TakePicture;
+import org.theta4j.webapi.Theta;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,13 +30,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity {
+// if you have a real camera, change the two lines below
 
-    private final boolean HAVE_PHYSICAL_CAMERA = false;
+//public class MainActivity extends AppCompatActivity {
+public class MainActivity extends PluginActivity {
+
+    private final boolean HAVE_PHYSICAL_CAMERA = true;
 
     Button takePictureButton;
     ImageView thetaImageView;
@@ -37,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
     String basepath = extStorageDirectory + "/DCIM/100RICOH/";
 
     String picturePath;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ExecutorService imageExecutor = Executors.newSingleThreadExecutor();
+    private ExecutorService thetaExecutor = Executors.newSingleThreadExecutor();
+
+    URL inputFileUrl;
 
 
     int imageNumber = 0;
@@ -92,6 +109,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (HAVE_PHYSICAL_CAMERA) {
+            setKeyCallback(keyCallback);
+            Log.d("THETADEBUG", "set key callback");
+            if (isApConnected()) {
+
+            }
+
+        }
+    }
+
     private void processImage(String thetaPicturePath) {
         /**
          * Put your code here to process the image.
@@ -115,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bitmap = getBitmap(thetaPicturePath);
 
         // bitmap.compress should be put on different thread
-        executor.submit(() -> {
+        imageExecutor.submit(() -> {
             bitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
             try {
                 FileOutputStream fos = new FileOutputStream(myExternalFile);
@@ -204,4 +235,64 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bmpTheta = Bitmap.createScaledBitmap(imgTheta, 400, 200, true);
         return bmpTheta;
     }
+
+
+
+    private KeyCallback keyCallback = new KeyCallback() {
+
+        Theta theta = Theta.createForPlugin();
+
+        @Override
+        public void onKeyDown(int keyCode, KeyEvent keyEvent) {
+            if (keyCode == KeyReceiver.KEYCODE_CAMERA) {
+                thetaExecutor.submit(() -> {
+                    CommandResponse<TakePicture.Result> response = null;
+
+                    try {
+                        response = theta.takePicture();
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    while (response.getState() != CommandState.DONE) {
+                        try {
+                            response = theta.commandStatus(response);
+                            Thread.sleep(100);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Log.d("THETADEBUG", "fileUrl: " + response.getResult().getFileUrl());
+
+                    inputFileUrl = response.getResult().getFileUrl();
+                    processImage(getImagePath());
+
+                });
+            }
+        }
+        @Override
+        public void onKeyUp(int keyCode, KeyEvent keyEvent) {
+
+        }
+
+        @Override
+        public void onKeyLongPress(int keyCode, KeyEvent keyEvent) {
+
+        }
+    };
+
+    public String getImagePath() {
+        String[] parts = inputFileUrl.toString().split("/");
+        int length = parts.length;
+        String filepath = Environment.getExternalStorageDirectory().getPath() +
+                "/DCIM/100RICOH/" +
+                parts[length - 1];
+        Log.d("THETA", filepath);
+        return filepath;
+    }
+
 }
