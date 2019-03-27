@@ -8,14 +8,14 @@ one image every 5 minutes and transmit the small files automatically.
 A person can look at the small image and decide if they want the larger
 image.
 
-The main branch of this app was developed on an Android Studio AVD and
+This app was developed with an Android Studio AVD and
 uses actual RICOH THETA images stored in the app. The virtual shutter
 button will save the image to the virtual SD card of your AVD.
 
-The [with-camera](https://github.com/codetricity/no-camera-sample/tree/with-camera) 
-branch was developed with a RICOH THETA V. This branch allows the
-photographer to take a picture with the physical device
-shutter button on the camera.
+To use the app with a physical device RICOH THETA V, uncomment
+out the code at the beginning of `MainActivity.java`. With a 
+physical device, you can use the shutter button on the camera
+to take a picture.
 The shutter button also triggers the automatic processing of the image.
 
 ## Simulating Picture Taking
