@@ -2,14 +2,14 @@
 
 Sample app for Dream and Build contest participants without a camera.
 The app reduces RICOH THETA image size from 10.7MB to 0.12MB for
-transmission over unstable networks.  The original file is preserved
+transmission over unstable networks.  The original image file is preserved
 in the camera. The idea is to set up a timelapse to take 1,000 pictures,
 one image every 5 minutes and transmit the small files automatically.
 A person can look at the small image and decide if they want the larger
 image.
 
 The main branch of this app was developed on an Android Studio AVD and
-uses actual RICOH THETA images stored in the app. The virtual storage
+uses actual RICOH THETA images stored in the app. The virtual shutter
 button will save the image to the virtual SD card of your AVD.
 
 The [with-camera](https://github.com/codetricity/no-camera-sample/tree/with-camera) 
