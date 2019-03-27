@@ -9,12 +9,13 @@ A person can look at the small image and decide if they want the larger
 image.
 
 The main branch of this app was developed on an Android Studio AVD and
-uses RICOH THETA images that need to be loaded into the AVD for testing
-with adb. 
+uses actual RICOH THETA images stored in the app. The virtual storage
+button will save the image to the virtual SD card of your AVD.
 
 The [with-camera](https://github.com/codetricity/no-camera-sample/tree/with-camera) 
 branch was developed with a RICOH THETA V. This branch allows the
-photographer to take a picture with the shutter button on the camera.
+photographer to take a picture with the physical device
+shutter button on the camera.
 The shutter button also triggers the automatic processing of the image.
 
 ## Simulating Picture Taking
