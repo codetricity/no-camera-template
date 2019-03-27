@@ -99,7 +99,7 @@ for transmission over unstable cellular networks in remote areas.
 
 ## Loading RICOH THETA Sample Images Manually
 
-You do not need to use this app to storage images in your AVD.
+You do not need to use this app to store images in your AVD.
 You can manually save the images into the correct directory 
 with `adb`. 
 
