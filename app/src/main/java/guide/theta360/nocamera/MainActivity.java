@@ -26,6 +26,8 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final boolean HAVE_PHYSICAL_CAMERA = false;
+
     Button takePictureButton;
     ImageView thetaImageView;
     // on the RICOH THETA V, there is no function button. People often use the
