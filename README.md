@@ -19,9 +19,88 @@ The shutter button also triggers the automatic processing of the image.
 
 ## Simulating Picture Taking
 
+![first screen](images/firstscreen.png)
+
+press the shutter button.
+
+![image simulation](images/image_simulation.png)
+
+The app will save an actual RICOH THETA V image to the virtual 
+SD card of the Android Virtual Device (AVD). The image file
+will be saved to `/sdcard/DCIM/100RICOH`. This is mapped to
+`/storage/emulated/0/DCIM/100RICOH/` on most devices.
+
+The simulated camera can take four images by default. You can
+add additional images to the `assets` folder for testing.
+
+![image simulation 2 ](images/image2.png)
+
+You can log into your AVD to see the files. You can delete the
+files and the app will restore the file when you take a picture.
+
+![AVD files ](images/sdcard_files.png)
+
+In `MainActivity.java`, there is a method called 
+`processImage()`.  Put your image processing code in that method.
+It receives a string for the full image path that was just taken
+by the RICOH THETA camera.
+
+![process image](images/process_method.png)
+
+## Image Processing Demo
+
+Developers can process the image inside the camera by 
+running common libraries such as TensorFlow or OpenCV. You
+can also push the image to a cloud or messaging system. Examples
+for all of these plug-ins with GitHub repos of the full code
+are included in the Getting Started Guide.
+
+The demo included with this app, reduces the size of a 
+RICOH THETA image from 10.7MB to 0.12MB for transmission
+over networks.
+
+Take a picture first, then press *PROCESS*. 
+
+![process button](images/process_button.png)
+
+You can see the processed image file in your AVD.
+
+![processed file](images/processed_file.png)
+
+Download the file to your local computer with `adb pull`.
+
+![adb pull](images/adb_pull.png)
+
+You can now view and analyze the processed file on your local computer.
+
+![view sample image](images/image_view.png)
+
+exiftool is useful for inspecting metadata.
+
+![exiftool](images/exiftool.png)
+
+## Metadata
+
+The metadata is stripped out of the images in this example. In particular, the
+ProjectionType is not set to equirectangular.  You can add the metadata
+in with exiftool for testing.
+
+![projectiontype](images/projection_type.png)
+
+Once you have the ProjectionType set to equirectangular, the
+image will be viewable in 360 apps such as Facebook. Note that the
+image resolution is intentionally low to reduce file size
+for transmission over unstable cellular networks in remote areas.
+
+![facebook](images/facebook.png)
+
 
 
 ## Loading RICOH THETA Sample Images Manually
+
+You do not need to use this app to storage images in your AVD.
+You can manually save the images into the correct directory 
+with `adb`. 
 
 RICOH THETA V sample images are available here:
  * https://community.theta360.guide/t/sample-media-and-development-resources/3754
@@ -42,6 +121,9 @@ Check to see that the image is installed in the proper directory.
 
 
 ## App Permissions
+
+To use this app, you must set the permissions in *Settings*.
+
 In Android Virtual Device, select Setting -> Apps to
 enable storage permissions.
 
@@ -59,46 +141,6 @@ Enable _Storage_ permissions.
 
 ![storage permission](images/storage_permission.png)
 
-
-## Test Image Processing
-
-The RICOH THETA V has no screen. Your processing will be 
-triggered by the shutter button or a button on the side
-of the camera. To simulate the experience of pressing a camera
-button, you can set up a button in your AVD.
-
-![process button](images/process_button.png)
-
-You will see processed image file in your AVD.
-
-![processed file](images/processed_file.png)
-
-Download the file to your local computer with `adb pull`.
-
-![adb pull](images/adb_pull.png)
-
-You can now view and analyze the file on your local computer.
-
-![view sample image](images/image_view.png)
-
-exiftool is useful for inspecting metadata.
-
-![exiftool](images/exiftool.png)
-
-## Caution About Metadata
-
-The metadata is stripped out of this example. In particular, the
-ProjectionType is not set to equirectangular.  You can add the metadata
-in with exiftool for testing.
-
-![projectiontype](images/projection_type.png)
-
-Once you have the ProjectionType set to equirectangular, the
-image will be viewable in 360 apps such as Facebook. Note that the
-image resolution is intentionally low to reduce file size
-for transmission over unstable cellular networks in remote areas.
-
-![facebook](images/facebook.png)
 
 ## Finishing RICOH THETA Plug-in
 

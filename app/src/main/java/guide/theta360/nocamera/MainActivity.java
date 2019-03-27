@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         takePictureButton = findViewById(R.id.takePictueButtonId);
         processButton = findViewById(R.id.processButtonId);
         thetaImageView = findViewById(R.id.thetaImageId);
+        thetaImageView.setImageResource(R.drawable.theta);
 
         File thetaMediaDir = new File(basepath);
         if (!thetaMediaDir.exists()) {
