@@ -145,19 +145,19 @@ public class MainActivity extends AppCompatActivity {
          *
          */
 
-        Log.d("THETADEBUG", "Processing image " + thetaPicturePath);
+        Log.d(TAG, "Processing image " + thetaPicturePath);
 
         /**
          * Sample processing code below
          */
 
-        File myExternalFile = new File(basepath + "PROCESSED_IMAGE.PNG");
+        File myExternalFile = new File(basepath + "PROCESSED_IMAGE.WEBP");
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Bitmap bitmap = getBitmap(thetaPicturePath);
 
         // bitmap.compress should be put on different thread
         imageExecutor.submit(() -> {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.WEBP, 50, byteArrayOutputStream);
             try {
                 FileOutputStream fos = new FileOutputStream(myExternalFile);
                 fos.write(byteArrayOutputStream.toByteArray());
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             if (imageNumber >= thetaImageFiles.length) {
                 imageNumber = 0;
-                Log.d("THETADEBUG", "Set Image Number to Zero");
+                Log.d(TAG, "Set Image Number to Zero");
             }
 
             // copy file
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
             out.flush();
             out.close();
             out= null;
-            Log.d("THETADEBUG", "copied file " + thetaImageFiles[imageNumber]);
+            Log.d(TAG, "copied file " + thetaImageFiles[imageNumber]);
 
             InputStream inputStream = assetManager.open("100RICOH/" + thetaImageFiles[imageNumber]);
             Drawable d = Drawable.createFromStream(inputStream, null);
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap getBitmap(String photoPath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 4;
-        Log.d("THETADEBUG", photoPath);
+        Log.d(TAG, photoPath);
         Bitmap imgTheta = BitmapFactory.decodeFile(photoPath, options);
         ByteBuffer byteBufferTheta = ByteBuffer.allocate(imgTheta.getByteCount());
         imgTheta.copyPixelsToBuffer(byteBufferTheta);
@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    Log.d("THETADEBUG", "fileUrl: " + response.getResult().getFileUrl());
+                    Log.d(TAG, "fileUrl: " + response.getResult().getFileUrl());
 
                     inputFileUrl = response.getResult().getFileUrl();
                     processImage(getImagePath());
@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
         String filepath = Environment.getExternalStorageDirectory().getPath() +
                 "/DCIM/100RICOH/" +
                 parts[length - 1];
-        Log.d("THETA", filepath);
+        Log.d(TAG, filepath);
         return filepath;
     }
 
