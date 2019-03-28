@@ -70,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
     private ExecutorService imageExecutor = Executors.newSingleThreadExecutor();
     private ExecutorService thetaExecutor = Executors.newSingleThreadExecutor();
 
-    URL inputFileUrl;
 
+    URL inputFileUrl;
+    private final String TAG = "THETADEBUG";
 
     int imageNumber = 0;
 
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 picturePath = takeThetaPicture();
                 Toast.makeText(MainActivity.this, "Picture saved to THETA SD card " +
                         picturePath, Toast.LENGTH_LONG).show();
-                Log.d("THETADEBUG", "received image path " + picturePath);
+                Log.d(TAG, "received image path " + picturePath);
 
                 /**
                  * Call your image processing or file transfer method here or
@@ -124,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 processImage(picturePath);
+                Toast.makeText(MainActivity.this, "Processed image: " +
+                        picturePath, Toast.LENGTH_LONG).show();
             }
         });
     }
