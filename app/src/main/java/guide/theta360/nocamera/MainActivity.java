@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.theta360.pluginlibrary.activity.PluginActivity;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button takePictureButton;
     ImageView thetaImageView;
+    TextView statusTextView;
     // on the RICOH THETA V, there is no function button. People often use the
     // wifi button on the side of the camera to process images or change settings
     Button processButton;
@@ -93,21 +95,7 @@ public class MainActivity extends AppCompatActivity {
         thetaImageView = findViewById(R.id.thetaImageId);
         thetaImageView.setImageResource(R.drawable.theta);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "write storage permission good", Toast.LENGTH_SHORT).show();
-        } else {
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-//                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//                Toast.makeText(this, "Need to save images to storage", Toast.LENGTH_LONG).show();
-//            } else {
-//                ActivityCompat.requestPermissions(this,
-//                        new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
-//                        PERMISSION);
-//            }
-            Toast.makeText(this, "WARNING: Need to enable storage permission",
-                    Toast.LENGTH_LONG).show();
-        }
+        checkPermission();
 
         File thetaMediaDir = new File(basepath);
         if (!thetaMediaDir.exists()) {
@@ -171,13 +159,17 @@ public class MainActivity extends AppCompatActivity {
          * Sample processing code below
          */
 
-        File myExternalFile = new File(basepath + "PROCESSED_IMAGE.WEBP");
+/*         You can change the format to WEBP. You also need to change
+        Bitmap.CompressFormat below*/
+       // File myExternalFile = new File(basepath + "PROCESSED_IMAGE.WEBP");
+        File myExternalFile = new File(basepath + "PROCESSED_IMAGE.PNG");
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Bitmap bitmap = getBitmap(thetaPicturePath);
 
         // bitmap.compress should be put on different thread
         imageExecutor.submit(() -> {
-            bitmap.compress(Bitmap.CompressFormat.WEBP, 50, byteArrayOutputStream);
+            // you can change the compress format to WEBP in the line below
+            bitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
             try {
                 FileOutputStream fos = new FileOutputStream(myExternalFile);
                 fos.write(byteArrayOutputStream.toByteArray());
@@ -325,4 +317,19 @@ public class MainActivity extends AppCompatActivity {
         return filepath;
     }
 
+    public void checkPermission() {
+        statusTextView = findViewById(R.id.statusViewId);
+        if ((ContextCompat.checkSelfPermission(this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) &&
+                (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                        PackageManager.PERMISSION_GRANTED)) {
+                Toast.makeText(this, "storage permission good", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "WARNING: Need to enable storage permission",
+                        Toast.LENGTH_LONG).show();
+            statusTextView.setText("Check Permissions");
+        }
+    }
 }
