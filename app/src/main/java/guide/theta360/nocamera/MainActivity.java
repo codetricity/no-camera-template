@@ -1,10 +1,14 @@
 package guide.theta360.nocamera;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -88,6 +92,22 @@ public class MainActivity extends AppCompatActivity {
         processButton = findViewById(R.id.processButtonId);
         thetaImageView = findViewById(R.id.thetaImageId);
         thetaImageView.setImageResource(R.drawable.theta);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "write storage permission good", Toast.LENGTH_SHORT).show();
+        } else {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//                Toast.makeText(this, "Need to save images to storage", Toast.LENGTH_LONG).show();
+//            } else {
+//                ActivityCompat.requestPermissions(this,
+//                        new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                        PERMISSION);
+//            }
+            Toast.makeText(this, "WARNING: Need to enable storage permission",
+                    Toast.LENGTH_LONG).show();
+        }
 
         File thetaMediaDir = new File(basepath);
         if (!thetaMediaDir.exists()) {
