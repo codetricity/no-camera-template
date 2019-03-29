@@ -166,9 +166,9 @@ public class MainActivity extends AppCompatActivity {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Bitmap bitmap = getBitmap(thetaPicturePath);
 
-        // bitmap.compress should be put on different thread
+        // change bitmap.compress(Bitmap.CompressFormat.PNG to WEBP below
         imageExecutor.submit(() -> {
-            // you can change the compress format to WEBP in the line below
+            // you need to change both the quality and the PNG format
             bitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
             try {
                 FileOutputStream fos = new FileOutputStream(myExternalFile);
